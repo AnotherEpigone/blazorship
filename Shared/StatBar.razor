@@ -1,0 +1,52 @@
+﻿@using BlazorShip.Data
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">BlazorShip</a>
+    </div>
+</div>
+
+<nav class="flex-column">
+    <div class="container-fluid title">
+        <span class="oi oi-bolt" aria-hidden="true"></span><a class="stat-cat">Scanners</a>
+    </div>
+    <div class="container-fluid para">
+        Atmosphere: @GameState?.AtmosphereScanner%<br/>
+        Gravity: @GameState?.GravityScanner%<br/>
+        Temperature: @GameState?.TemperatureScanner%<br/>
+        Water: @GameState?.WaterScanner%<br/>
+        Resources: @GameState?.ResourcesScanner%<br/>
+    </div>
+    <div class="container-fluid title">
+        <span class="oi oi-cog" aria-hidden="true"></span><a class="stat-cat">Systems</a>
+    </div>
+    <div class="container-fluid para">
+        Landing: @GameState?.LandingSystem%<br/>
+        Construction: @GameState?.ConstructionSystem%<br/>
+    </div>
+    <div class="container-fluid title">
+        <span class="oi oi-hard-drive" aria-hidden="true"></span><a class="stat-cat">Databases</a>
+    </div>
+    <div class="container-fluid para">
+        Scientific: @GameState?.ScientificDatabase%<br/>
+        Cultural: @GameState?.CulturalDatabase%<br/>
+    </div>
+    <div class="container-fluid title">
+        <span class="oi oi-tablet" aria-hidden="true"></span><a class="stat-cat">Cargo bay</a>
+    </div>
+    <div class="container-fluid para">
+        Colonists: @GameState?.Colonists<br/>
+        Surface probes: @GameState?.Probes<br/>
+    </div>
+</nav>
+
+@code {
+    protected override void OnParametersSet()
+    {
+        GameState.GameStateChanged += (_, __) => StateHasChanged();
+        base.OnParametersSet();
+    }
+
+    [CascadingParameter]
+    private GameState? GameState { get; set; }
+}

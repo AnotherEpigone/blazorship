@@ -1,0 +1,69 @@
+﻿@page "/"
+@using BlazorShip.Data
+
+<PageTitle>BlazorShip</PageTitle>
+@if (GameState == null)
+{
+    @LoadingMsg
+}
+else
+{
+    <p>@GameState.StoryText</p>
+    @if (GameState.Planet != null)
+    {
+        <p>Atmosphere: <label class="@GameState.Planet.Atmosphere.QualityClass">@GameState.Planet.Atmosphere.Name</label><br/>
+        Gravity: <label class="@GameState.Planet.Gravity.QualityClass">@GameState.Planet.Gravity.Name</label><br/>
+        Temperature: <label class="@GameState.Planet.Temperature.QualityClass">@GameState.Planet.Temperature.Name</label><br/>
+        Water: <label class="@GameState.Planet.Water.QualityClass">@GameState.Planet.Water.Name</label><br/>
+        Resources: <label class="@GameState.Planet.Resources.QualityClass">@GameState.Planet.Resources.Name</label></p>
+
+        @if (GameState.Colonized)
+        {
+            <p><b>Score</b></p>
+            <p>
+                Planet atmosphere: @GameState.Planet.Atmosphere.Score<br/>
+                Planet gravity: @GameState.Planet.Gravity.Score<br/>
+                Planet temperature: @GameState.Planet.Temperature.Score<br/>
+                Planet water: @GameState.Planet.Water.Score<br/>
+                Planet resources: @GameState.Planet.Resources.Score<br/>
+                Survivors: @GameState.Colonists<br/>
+                Surviving scientific knowledge: @(GameState.ScientificDatabase * 10)<br/>
+                Surviving cultural knowledge: @(GameState.CulturalDatabase * 10)<br/>
+                Total: @Score
+            </p>
+        }
+    }
+
+    @if (!string.IsNullOrEmpty(GameState.Danger?.StoryPart2))
+    {
+        <p>@GameState.Danger.StoryPart2</p>
+    }
+
+    @foreach (var option in GameState.Options)
+    {
+        <button class="btn btn-link" onclick="@(()=>
+            {
+                option.Action(GameState);
+                StateHasChanged();
+                GameState.OnUpdate();
+            })">
+                @option.Name
+        </button>
+    }
+}
+
+@code {
+    [CascadingParameter]
+    public GameState? GameState { get; set; }
+
+    public string LoadingMsg => "Loading...";
+
+    public int Score => GameState.Planet.Atmosphere.Score
+        + GameState.Planet.Gravity.Score
+        + GameState.Planet.Temperature.Score
+        + GameState.Planet.Water.Score
+        + GameState.Planet.Resources.Score
+        + GameState.Colonists
+        + GameState.ScientificDatabase * 10
+        + GameState.CulturalDatabase * 10;
+}

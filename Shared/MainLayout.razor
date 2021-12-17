@@ -1,0 +1,22 @@
+﻿@using BlazorShip.Data
+@inherits LayoutComponentBase
+
+<PageTitle>BlazorShip</PageTitle>
+
+<div class="page">
+    <CascadingValue Value="GameState">
+        <div class="sidebar">
+            <StatBar />
+        </div>
+
+        <main>
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
+    </CascadingValue>
+</div>
+
+@code {
+    public GameState GameState { get; } = GameState.Default;
+}
